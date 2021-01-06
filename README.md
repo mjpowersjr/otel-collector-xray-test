@@ -21,7 +21,10 @@ sudo watch "lsof -n -p $(ps -elf | grep [a]wscollector | awk '{print $4}') | wc 
 ```
 
 # Observations
-In my development environment with restricted ulimits (specified in `docker-compose.yml`), the otel-collector services seems to run out of file descriptors between 6k-7k traces. 
+In my development environment with restricted ulimits (specified in `docker-compose.yml`), the otel-collector services seems to run out of file descriptors between 6k-7k traces. **The majority of the file descriptors are dedicated to network sockets.**
 
-By switching the `otel-collector` service config to use a logging exporter instead of the default AWS exporters, you can see the file descriptors grow to the defined limits as well. In this configuration, the collector does not report an error, but appears to stop collecting new traces. This seems like a clue that maybe the bug lies somewhere within `opentelemetry-js` or `otel-collector` (or in some way both?).
+By switching the `otel-collector` service config to use a logging exporter instead of the default AWS exporters, you can see the file descriptors grow to the defined limits as well. 
+
+
+In this configuration, the collector does not report an error, but appears to stop collecting new traces. This seems like a clue that maybe the bug lies somewhere within `opentelemetry-js` or `otel-collector` (or in some way both?).
 
