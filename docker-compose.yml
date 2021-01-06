@@ -1,0 +1,38 @@
+version: '3.6'
+
+services:
+
+  otel-collector:
+    # Default config, shipped with AWS OTEL Collector:
+    command: --config=/etc/otel-config.yaml
+    
+    # Based on default config, replaced AWS exporters w. logger:
+    # command: --config=/etc/otel-config-logging-exporter.yaml
+
+    image: amazon/aws-otel-collector:v0.6.0
+    environment:
+      - AWS_REGION=us-east-1
+      - AWS_PROFILE=default
+      # alternative approach to credentials: 
+      # - AWS_PROFILE=default
+      # - AWS_PROFILE=default
+    
+    # Manually configure ulimits to expedite running out of file descriptors
+    ulimits:
+      nofile:
+        soft: 50
+        hard: 50
+
+    volumes:
+      - ./otel-collector/otel-config-logging-exporter.yaml:/etc/otel-config-logging-exporter.yaml:ro
+      
+      # Map in AWS credentials from config directory
+      - ~/.aws:/root/.aws:ro
+
+  trace-generator:
+    build:
+      context: ./trace-generator
+    depends_on:
+      - otel-collector
+    environment:
+      - OTEL_COLLECTOR=http://otel-collector:55681/v1/trace
