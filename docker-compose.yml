@@ -4,15 +4,16 @@ services:
 
   otel-collector:
     # Default config, shipped with AWS OTEL Collector:
-    command: --config=/etc/otel-config.yaml
+    # command: --config=/etc/otel-config.yaml
     
     # Based on default config, replaced AWS exporters w. logger:
-    # command: --config=/etc/otel-config-logging-exporter.yaml
+    command: --config=/etc/otel-config-logging-exporter.yaml
 
     image: amazon/aws-otel-collector:v0.6.0
     environment:
       - AWS_REGION=us-east-1
       - AWS_PROFILE=default
+      
       # alternative approach to credentials: 
       # - AWS_PROFILE=default
       # - AWS_PROFILE=default
@@ -35,4 +36,5 @@ services:
     depends_on:
       - otel-collector
     environment:
-      - OTEL_COLLECTOR=http://otel-collector:55681/v1/trace
+      - "OTEL_COLLECTOR_HTTP=http://otel-collector:55681/v1/trace"
+      - "OTEL_COLLECTOR_GRPC=http://otel-collector:55680"

@@ -14,7 +14,9 @@
     "@aws/otel-aws-xray-propagator": "^0.13.0",
     "@opentelemetry/api": "^0.14.0",
     "@opentelemetry/exporter-collector": "^0.14.0",
+    "@opentelemetry/exporter-collector-grpc": "^0.14.0",
     "@opentelemetry/node": "^0.14.0",
+    "@opentelemetry/plugin-grpc": "^0.14.0",
     "@opentelemetry/resources": "^0.14.0",
     "@opentelemetry/tracing": "^0.14.0"
   }
