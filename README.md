@@ -17,7 +17,7 @@ docker-compose build
 docker-compose up
 
 # monitor number of open file handles in otel collector (linux environment)
-sudo watch "lsof -n -p $(ps -elf | grep [a]wscollector | awk '{print $4}') | wc -l"
+sudo watch "lsof -n -p $(ps -elf | grep [a]wscollector | awk '{print $4}') | grep TCP | wc -l"
 ```
 
 # Observations
